@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Test Ride Premiado</title>
+<meta name="theme-color" content="#001151">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Test Ride" id="metaTitulo">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" id="iconeApple">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="manifest" href="manifest.webmanifest" id="manifesto">
+<script>
+  // ===== Link oficial do app no Google (o que termina em /exec) =====
+  var APP_GOOGLE = 'https://script.google.com/macros/s/AKfycbxV9qcGIsMchHASY7PzgfouNi9LcU8jwjlFoL9eCO3ttAAAftFeucTYENj00VVj3u7Z/exec';
+
+  // Gestor: troca nome, ícone e manifesto antes de o navegador ler
+  var GESTOR = new URLSearchParams(location.search).get('p') === 'gestor';
+  if (GESTOR) {
+    document.title = 'Test Ride Gestor';
+    document.getElementById('metaTitulo').content = 'TR Gestor';
+    document.getElementById('iconeApple').href = 'apple-touch-icon-gestor.png';
+    document.getElementById('manifesto').href = 'manifest-gestor.webmanifest';
+  }
+</script>
+<style>
+  html, body { margin: 0; height: 100%; background: #001151; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+  body { display: flex; flex-direction: column; padding-top: env(safe-area-inset-top, 0px); box-sizing: border-box; }
+  iframe { flex: 1; width: 100%; border: 0; display: block; background: #EEF1F7; }
+  .oculto { display: none !important; }
+
+  /* Faixa de instalação (some quando o app já está instalado) */
+  .faixa { flex: none; display: flex; align-items: center; gap: 12px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: #001151; color: #fff; border-top: 4px solid #de0039; }
+  .faixa img { width: 40px; height: 40px; border-radius: 9px; flex: none; }
+  .faixa p { margin: 0; flex: 1; font-size: 14px; line-height: 1.3; color: #D6DEF0; }
+  .faixa p b { color: #fff; }
+  .faixa .instalar { flex: none; border: 0; border-radius: 8px; background: #de0039; color: #fff; font-weight: 700; font-size: 15px; padding: 10px 14px; cursor: pointer; }
+  .faixa .fechar { flex: none; border: 0; background: none; color: #AFC0E0; font-size: 22px; line-height: 1; padding: 4px 6px; cursor: pointer; }
+  button:focus-visible { outline: 3px solid #6FA8FF; outline-offset: 2px; }
+
+  /* Passo a passo do iPhone */
+  .fundo { position: fixed; inset: 0; background: rgba(0, 10, 40, .65); display: flex; align-items: flex-end; justify-content: center; padding: 16px; z-index: 10; }
+  .caixa { background: #fff; color: #0B1633; border-radius: 14px; border-top: 6px solid #de0039; padding: 20px; width: 100%; max-width: 420px; margin-bottom: env(safe-area-inset-bottom, 0px); }
+  .caixa h2 { margin: 0 0 10px; font-size: 22px; font-style: italic; }
+  .caixa ol { margin: 0; padding-left: 22px; }
+  .caixa li { margin-bottom: 10px; font-size: 16px; line-height: 1.4; }
+  .caixa li::marker { color: #de0039; font-weight: 800; }
+  .caixa svg { vertical-align: -4px; }
+  .caixa .ok { width: 100%; margin-top: 8px; border: 0; border-radius: 8px; background: #de0039; color: #fff; font-weight: 700; font-size: 17px; padding: 13px; cursor: pointer; }
+</style>
+</head>
+<body>
+  <iframe id="app" title="Test Ride Premiado" allow="clipboard-write"></iframe>
+
+  <div class="faixa oculto" id="faixa">
+    <img id="faixaIcone" src="icone-192.png" alt="">
+    <p id="faixaTexto"><b>Test Ride Premiado</b><br>Instale o app para abrir com um toque.</p>
+    <button class="instalar" type="button" id="btnInstalar">Instalar</button>
+    <button class="fechar" type="button" id="btnFechar" aria-label="Fechar">×</button>
+  </div>
+
+  <div class="fundo oculto" id="passosIphone" role="dialog" aria-modal="true" aria-labelledby="tituloIphone">
+    <div class="caixa">
+      <h2 id="tituloIphone">Instalar no iPhone</h2>
+      <ol>
+        <li>Toque no botão <b>Compartilhar</b>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#005AA9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="ícone de compartilhar"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 11v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/></svg>
+          na barra do Safari.</li>
+        <li>Role a lista e toque em <b>Adicionar à Tela de Início</b>.</li>
+        <li>Toque em <b>Adicionar</b>. O ícone com a logo aparece na sua tela.</li>
+      </ol>
+      <button class="ok" type="button" id="btnOk">Entendi</button>
+    </div>
+  </div>
+
+<script>
+  // ----- Abre o app do Google aqui dentro -----
+  var casca = location.origin + location.pathname.replace(/index\.html$/, '');
+  var params = new URLSearchParams({ casca: casca });
+  if (GESTOR) params.set('p', 'gestor');
+  document.getElementById('app').src = APP_GOOGLE + '?' + params.toString();
+
+  // ----- Instalação -----
+  var faixa = document.getElementById('faixa');
+  var CHAVE = 'trp_faixa_fechada' + (GESTOR ? '_gestor' : '');
+  var ua = navigator.userAgent || '';
+  var iphone = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var instalado = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  var fechada = false;
+  try { fechada = localStorage.getItem(CHAVE) === '1'; } catch (e) {}
+  var pedido = null;
+
+  if (GESTOR) {
+    document.getElementById('faixaIcone').src = 'icone-gestor-192.png';
+    document.getElementById('faixaTexto').innerHTML = '<b>Test Ride · Gestor</b><br>Instale o painel para abrir com um toque.';
+  }
+  function mostrarFaixa() { if (!instalado && !fechada) faixa.classList.remove('oculto'); }
+
+  // Android e computador: o navegador avisa que dá para instalar
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); pedido = e; mostrarFaixa(); });
+  window.addEventListener('appinstalled', function () { instalado = true; faixa.classList.add('oculto'); });
+  // iPhone: não existe instalação automática, então mostramos o passo a passo
+  if (iphone) mostrarFaixa();
+
+  document.getElementById('btnInstalar').onclick = function () {
+    if (pedido) {
+      pedido.prompt();
+      pedido.userChoice.then(function (r) { if (r.outcome === 'accepted') faixa.classList.add('oculto'); pedido = null; });
+    } else {
+      document.getElementById('passosIphone').classList.remove('oculto');
+    }
+  };
+  document.getElementById('btnFechar').onclick = function () {
+    faixa.classList.add('oculto');
+    try { localStorage.setItem(CHAVE, '1'); } catch (e) {}
+  };
+  document.getElementById('btnOk').onclick = function () { document.getElementById('passosIphone').classList.add('oculto'); };
+  document.getElementById('passosIphone').onclick = function (e) { if (e.target === this) this.classList.add('oculto'); };
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+</script>
+</body>
+</html>

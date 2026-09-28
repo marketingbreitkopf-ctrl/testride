@@ -1,0 +1,17 @@
+{
+  "id": "./?p=gestor",
+  "name": "Test Ride Premiado · Gestor",
+  "short_name": "TR Gestor",
+  "description": "Painel do gestor da campanha Test Ride Premiado.",
+  "start_url": "./?p=gestor",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#001151",
+  "theme_color": "#001151",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icone-gestor-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icone-gestor-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icone-gestor-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
